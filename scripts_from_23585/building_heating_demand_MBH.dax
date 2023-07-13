@@ -1,0 +1,5 @@
+// measure name: Building Heating Demand (MBH)
+//   table name: Hourly Heating Load Profile
+
+	
+MAX ( 'Hourly Heating Load Profile'[Building Heating Load (Btu)] ) / 1000

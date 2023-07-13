@@ -1,0 +1,44 @@
+// measure name: Consumption (kWh) Sample Kurtosis
+//   table name: V1 elec
+
+	
+-- Number of values in my sample
+VAR __N =
+    CALCULATE (
+        COUNTROWS ( 'V1 elec' ),
+        ALL ( 'V1 elec'[Consumption (kWh)] )
+    ) -- Sample mean
+VAR __Avg =
+    CALCULATE (
+        AVERAGE ( 'V1 elec'[Consumption (kWh)] ),
+        ALL ( 'V1 elec'[Consumption (kWh)] )
+    ) -- Sample standard deviation
+VAR __Std =
+    CALCULATE (
+        STDEV.S ( 'V1 elec'[Consumption (kWh)] ),
+        ALL ( 'V1 elec'[Consumption (kWh)] )
+    )
+VAR __Kurtosis =
+    DIVIDE (
+        __N * ( __N + 1 ),
+        ( __N - 1 ) * ( __N - 2 ) * ( __N - 3 )
+    )
+        * SUMX (
+            'V1 elec',
+            POWER (
+                DIVIDE (
+                    'V1 elec'[Consumption (kWh)] - __Avg,
+                    __Std
+                ),
+                4
+            )
+        )
+        - DIVIDE (
+            3 * ( __N - 1 ) ^ 2,
+            ( __N - 2 ) * ( __N - 3 )
+        )
+RETURN
+    FIXED (
+        __Kurtosis,
+        3
+    )

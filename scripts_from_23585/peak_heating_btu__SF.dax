@@ -1,0 +1,13 @@
+// measure name: Peak Heating Btuh/SF
+//   table name: Hourly Heating Load Profile
+
+	
+MAXX (
+    KEEPFILTERS (
+        VALUES ( 'Hourly Heating Load Profile'[Building] )
+    ),
+    CALCULATE (
+        MAX ( 'Hourly Heating Load Profile'[Building Heating Load (Btu)] )
+            / MAX ( 'Hourly Heating Load Profile'[Area (GSF)] )
+    )
+)

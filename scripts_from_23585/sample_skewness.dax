@@ -1,0 +1,40 @@
+// measure name: Consumption (kWh) Sample Skewness
+//   table name: V1 elec
+
+	
+-- Number of values in my sample
+VAR __N =
+    CALCULATE (
+        COUNTROWS ( 'V1 elec' ),
+        ALL ( 'V1 elec'[Consumption (kWh)] )
+    ) -- sample mean
+VAR __Avg =
+    CALCULATE (
+        AVERAGE ( 'V1 elec'[Consumption (kWh)] ),
+        ALL ( 'V1 elec'[Consumption (kWh)] )
+    ) -- sample standard deviation
+VAR __Std =
+    CALCULATE (
+        STDEV.S ( 'V1 elec'[Consumption (kWh)] ),
+        ALL ( 'V1 elec'[Consumption (kWh)] )
+    )
+VAR __Skew =
+    DIVIDE (
+        __N,
+        ( __N - 1 ) * ( __N - 2 )
+    )
+        * SUMX (
+            'V1 elec',
+            POWER (
+                DIVIDE (
+                    'V1 elec'[Consumption (kWh)] - __Avg,
+                    __Std
+                ),
+                3
+            )
+        )
+RETURN
+    FIXED (
+        __Skew,
+        3
+    )
