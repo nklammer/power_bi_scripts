@@ -1,0 +1,17 @@
+// V1 elec grouped by datetime
+
+GROUPBY (
+    CALCULATETABLE ( 
+        'V1 elec', KEEPFILTERS ( 
+            VALUES ( 
+                'V1 elec'[Meter] 
+            )
+        )
+    ),
+    [StartofHour], "Sum Consumption (kWh)", SUMX( 
+        CURRENTGROUP(), [Consumption (kWh)]
+    ), 
+    "Temperature", AVERAGEX( 
+            CURRENTGROUP(), [Temperature (°F)]
+    )
+)

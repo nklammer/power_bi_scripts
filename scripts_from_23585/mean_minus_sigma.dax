@@ -1,0 +1,10 @@
+// measure: V1 Mean minus Sigma
+// table:   V1 elec grouped by datetime
+
+	
+VAR __Mean =
+    AVERAGE ( 'V1 elec grouped by datetime'[Sum Consumption (kWh)] )
+VAR __Sigma =
+    STDEV.S ( 'V1 elec grouped by datetime'[Sum Consumption (kWh)] )
+RETURN
+    __Mean - __Sigma

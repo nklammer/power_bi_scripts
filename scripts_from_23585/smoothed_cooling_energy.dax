@@ -1,0 +1,18 @@
+VAR windowStart =
+    SELECTEDVALUE ( 'Cooling Energy'[StartofHour] )
+        - TIME ( 1, 0, 0 )
+VAR windowEnd =
+    windowStart
+        + TIME ( 3, 0, 0 )
+RETURN
+    CALCULATE (
+        AVERAGE ( 'Cooling Energy'[V2 Cooling (kWh)] ),
+        // After we change filters, do our calculation
+        FILTER (
+            // Replace any existing filter on the [Entry 20 min Date tiem bin] column with one that looks at the period we want
+            ALL ( 'Cooling Energy'[StartofHour] ),
+            // Look through *all* values in the column, ignoring any existing filters
+            [StartofHour] >= windowStart
+                && [StartofHour] <= windowEnd // Keep those rows which are in our time range
+        )
+    )
